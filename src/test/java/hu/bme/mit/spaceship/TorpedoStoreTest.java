@@ -17,4 +17,13 @@ class TorpedoStoreTest {
     // Assert
     assertEquals(true, result);
   }
+
+  @Test
+  void fire_Zero_Failure_Rate() {
+    TorpedoStore store = new TorpedoStore(1, 100);
+
+    boolean result = store.fire(1);
+
+    assertEquals(false, result);
+  }
 }
