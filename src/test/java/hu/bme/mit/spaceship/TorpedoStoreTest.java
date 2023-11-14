@@ -2,6 +2,7 @@ package hu.bme.mit.spaceship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -53,5 +54,28 @@ class TorpedoStoreTest {
     TorpedoStore store = new TorpedoStore(0, 0);
 
     assertThrows(IllegalArgumentException.class, () -> store.fire(1));
+  }
+  
+  @Test
+  void fire_Many() {
+    final int TEST_COUNT = 1000;
+    final double IDEAL_FAILURE_RATE = 0.5;
+    final double DELTA = 0.05;
+
+    TorpedoStore store = new TorpedoStore(TEST_COUNT, IDEAL_FAILURE_RATE);
+
+    // Testing with Monte Carlo Method.
+    
+    int failureCount = 0;
+
+    for (int i = 0; i < TEST_COUNT; i++) {
+      if (!store.fire(1)) {
+        failureCount++;
+      }
+    }
+
+    double failureRate = (double)failureCount / TEST_COUNT;
+
+    assertTrue(failureRate >= IDEAL_FAILURE_RATE - DELTA && failureRate <= IDEAL_FAILURE_RATE + DELTA);
   }
 }
